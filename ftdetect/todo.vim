@@ -10,3 +10,6 @@ autocmd BufNewFile,BufRead *.[Tt]odo.txt set filetype=todo
 autocmd BufNewFile,BufRead [Dd]one.txt set filetype=todo
 autocmd BufNewFile,BufRead *.[Dd]one.txt set filetype=todo
 
+autocmd BufNewFile,BufRead to/*.list set filetype=todo
+autocmd BufNewFile,BufRead *.ttxtm set filetype=todo
+

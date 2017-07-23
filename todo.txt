@@ -1,1 +1,3 @@
 2014-11-01 Find a way to import text into markdown and vim doc @doc
+2017-04-01 Add command to insert new, parse, toggle, and switch "user:.." tasks ~dotmpe @multiuser @tasks
+2017-04-01 Add a global command to insert a TODO/FIXME/BUG/XXX(:ID) at the cursor ~dotmpe @tasks 
