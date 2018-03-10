@@ -15,8 +15,8 @@ syntax  match  TodoComment            '^#\s.\+$'                       contains=
 
 
 " Dark purple for 'directives' (syntax extension, like c preproc directives)
-syntax  match  TodoDirective          '^#\w.*$'                        contains=TodoVId
-syntax  match  TodoVId                '[A-Za-z_][A-Za-z0-9_-]\+\W\+' contained contains=TodoNumeric,TodoNumerals
+syntax  match  TodoDirective          '^#\w.*$'                         contains=TodoVId
+syntax  match  TodoVId                '[A-Za-z_][A-Za-z0-9_-]\+\W\+'    contained contains=TodoNumeric,TodoNumerals
 
 "syntax match   TodoNumeric            '\(^\|\W\)[0-9][0-9,\/\.\+-]*\($\|\W\|[A-Za-z0-9\/\^]\{1,9\}\)'  contains=TodoNumeral
 "syntax match   TodoNumeric            '[0-9][0-9,\/\.\+-]*\($\|\W\|[A-Za-z0-9\/\^]\{1,9\}\)'  contains=TodoNumeral
@@ -33,24 +33,35 @@ syntax  match  TodoPriorityE          '^\s*([eE][^\)]*)\s\+'            contains
 syntax  match  TodoNOTE               'NOTE'
 syntax  match  TodoPriorityF          '^\s*([fF][^\)]*)\s\+'            contains=TodoDate,TodoIssueID
 syntax  match  TodoXXX                'XXX'
-syntax  match  TodoPriorityPit        '^\s*([g-rG-R][^\)]*)\s\+'            contains=TodoDate,TodoIssueID
-syntax  match  TodoPriorityPermafrost '^\s*([s-zS-Z][^\)]*)\s\+'            contains=TodoDate,TodoIssueID
+syntax  match  TodoPriorityPit        '^\s*([g-rG-R][^\)]*)\s\+'        contains=TodoDate,TodoIssueID
+syntax  match  TodoPriorityPermafrost '^\s*([s-zS-Z][^\)]*)\s\+'        contains=TodoDate,TodoIssueID
+
 
 " Tag-Id's (Strings with numbers, ie. TODO-123 BUG456)
 " this has a side effect of coloring every alphanumeric concatenation, like IE4,
 " HTML5 too. But that is acceptable for me now.
-" NOTE: tags of reference ID's cannot contain numericals sadly
-syntax  match  TodoInlineRefs     '\(^\|\s\)[A-Za-z_-]\+[\-\._]\?[0-9][0-9\-\.]*\(\s\|$\|\W\)' contains=TodoInlineRefs,TodoProject,TodoContext
+" NOTE: tags of reference ID's cannot contain numericals sadly, and this only
+" takes numerical ID's. So no PROJ2-8d9x3 etc. If trying to apply such format
+" here, would need to detect for non-dictionary words. Ie. not practical.
+syntax  match  TodoInlineRefs1    '\(^\|\s\)[A-Za-z_-]\+[\-\._]\?[0-9][0-9\-\.]*\(\s\|$\|\W\)' contains=TodoInlineRefs1,TodoProject,TodoContext
+" Better to use alt. inlineref format which enforces separator, still needs some
+" thought on allowed chars to pervent overlap with others. For complex Id's,
+" using meta or uriref may be more suited.
+"syntax  match  TodoInlineRefs2    '\(^\|\s\)[A-Za-z0-9_-]\+[\-\._][^\ ]\+\(\s\|$\|\W\)' contains=TodoInlineRefs2,TodoProject,TodoContext
+
+
+"syntax  match  TodoDate           '\(^\|\s\)\d\{2,4\}-\d\{2\}-\d\{2\}'       contained contains=NONE
+syntax  match  TodoDate           '\(^\|\s\)\d\{2,4\}-\d\{2\}-\d\{2\}'       contains=TodoDate,TodoIssueID
 
 " Treat any header ending with a colon as the IssueId for the entry
 " FIXME: need to match only first occurence, not meta attributes
 "syntax  match  TodoIssueID        '\(^\|\s\)\w[A-Za-z0-9_\.-]\+:' contains=NONE
-syntax  match  TodoIssueID        '\(^\|\s\)\([A-Za-z_-]\+[\-\._]\)\?[0-9\-\.]*:' contains=NONE
-syntax  match  TodoDate           '\d\{2,4\}-\d\{2\}-\d\{2\}' contains=NONE
-syntax  match  TodoProject        '+[^[:blank:]]\+'  contains=NONE
-syntax  match  TodoContextAlt     '@[^[:blank:]]\+'  contains=NONE
-syntax  match  TodoContext        '@[A-Z][^[:blank:]]\+'  contains=NONE
-syntax  match  TodoUser           '\~[^[:blank:]]\+' contains=NONE
+syntax  match  TodoIssueID        '\(^\|\s\)\([A-Za-z_][A-Za-z0-9_-]\+[\-\._]\)\?[0-9\-\.]\+:' contains=NONE
+
+syntax  match  TodoProject        '+[^[:blank:]]\+'                          contains=NONE
+syntax  match  TodoContextAlt     '@[^[:blank:]]\+'                          contains=NONE
+syntax  match  TodoContext        '@[A-Z][^[:blank:]]\+'                     contains=NONE
+syntax  match  TodoUser           '\~[^[:blank:]]\+'                         contains=NONE
 syntax  match  TodoMeta           '\(^\|\<\)[A-Za-z\.\/_-]\+:[^[:blank:]]\+' contains=NONE
 syntax  match  TodoCite           '\s*\[[^\]]*\]'
 syntax  match  TodoXRef           '\s*<[^>]*>'
@@ -122,14 +133,16 @@ highlight  default  link  TodoDate        PreProc
 highlight  default  link  TodoUser        SignColumn
 
 " Override with some dimmer variety from VIM airline, & others
-highlight  default  link  TodoInlineRefs  NERDTreeDir
+highlight  default  link  TodoInlineRefs1 NERDTreeDir
+highlight  default  link  TodoInlineRefs2 NERDTreeDir
 highlight  default  link  TodoCite        airline_tabfill
 highlight  default  link  TodoContextAlt  NERDTreeUp
 highlight  default  link  TodoContext     Directory
 highlight  default  link  TodoProject     GitGutterChangeDefault
 
 " Std. scheme refs for above
-highlight  default  link  TodoInlineRefs  MoreMsg
+highlight  default  link  TodoInlineRefs1 MoreMsg
+highlight  default  link  TodoInlineRefs2 MoreMsg
 highlight  default  link  TodoCite        Type
 " would like a greenish but my Identifier is too bright
 highlight  default  link  TodoXRef        Comment
