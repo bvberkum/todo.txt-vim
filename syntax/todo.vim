@@ -10,9 +10,8 @@ if exists("b:current_syntax")
 endif
 
 " Dim grey for entire close entry, or comment lines
-syntax  match  TodoDone               '^[xX]\s.\+$'
+syntax  match  TodoDone               '^\s\+[xX]\s.\+$'
 syntax  match  TodoComment            '^#\s.\+$'                       contains=TodoBUG,TodoFIXME,TodoTODO,TodoNOTE,TodoXXX
-
 
 " Dark purple for 'directives' (syntax extension, like c preproc directives)
 syntax  match  TodoDirective          '^#\w.*$'                         contains=TodoVId
@@ -62,9 +61,11 @@ syntax  match  TodoProject        '+[^[:blank:]]\+'                          con
 syntax  match  TodoContextAlt     '@[^[:blank:]]\+'                          contains=NONE
 syntax  match  TodoContext        '@[A-Z][^[:blank:]]\+'                     contains=NONE
 syntax  match  TodoUser           '\~[^[:blank:]]\+'                         contains=NONE
-syntax  match  TodoMeta           '\(^\|\<\)[A-Za-z\.\/_-]\+:[^[:blank:]]\+' contains=NONE
+syntax  match  TodoMeta           '\(^\|\<\)[_0-9A-Za-z\.\/-]\+:[^[:blank:]]\+' contains=NONE
 syntax  match  TodoCite           '\s*\[[^\]]*\]'
-syntax  match  TodoXRef           '\s*<[^>]*>'
+syntax  match  TodoHRef           '\s*<[^>]*>'
+syntax  match  TodoXRef           '#[^ ]\+'
+syntax  match  TodoPreProcDir     '^#[^ ]\+'
 
 " Colour quoted values serpatedly at various levels
 syntax  match  TodoQuote          '\s*\'[^\']*\''
@@ -77,7 +78,7 @@ syntax  match  TodoQuoteDouble    '\s*"[^"]*"'
 syntax  match  TodoQuoteDouble2   '\s*""[^"]*""'
 syntax  match  TodoQuoteDouble3   '\s*"""[^"]*"""'
 
-syntax  match  TodoHold               '^.\+\ \[WAIT\]'              contains=TodoBUG,TodoFIXME,TodoTODO,TodoNOTE,TodoXXX,TodoDate,TodoIssueID,TodoProject,TodoContext,TodoContextAlt,TodoUser,TodoMeta,TodoCite,TodoXRef,TodoHoldTag
+syntax  match  TodoHold               '^.\+\ \[WAIT\]'              contains=TodoBUG,TodoFIXME,TodoTODO,TodoNOTE,TodoXXX,TodoDate,TodoIssueID,TodoProject,TodoContext,TodoContextAlt,TodoUser,TodoMeta,TodoCite,TodoXRef,TodoHRef, TodoHoldTag
 " ,TodoVId
 syntax  match  TodoHoldTag        '\s*\[WAIT\]'
 
@@ -97,6 +98,10 @@ highlight  default  link  TodoDirective   NonText
 highlight  default  link  TodoVId         Type
 highlight  default  link  TodoNumeric     Number
 highlight  default  link  TodoNumeral     Type
+
+highlight  default  link  TodoPreProcDir  SignColumn
+highlight  default  link  TodoXRef        String
+" highlight  default  link  TodoXRef        GitGutter
 
 highlight  default  link  TodoQuote        Identifier
 highlight  default  link  TodoQuote2       Identifier
@@ -130,7 +135,7 @@ highlight  default  link  TodoPriorityPermafrost VertSplit
 highlight  default  link  TodoDate        PreProc
 
 " Grey ~user
-highlight  default  link  TodoUser        SignColumn
+highlight  default  link  TodoUser        SpecialKey
 
 " Override with some dimmer variety from VIM airline, & others
 highlight  default  link  TodoInlineRefs1 NERDTreeDir
@@ -138,14 +143,14 @@ highlight  default  link  TodoInlineRefs2 NERDTreeDir
 highlight  default  link  TodoCite        airline_tabfill
 highlight  default  link  TodoContextAlt  NERDTreeUp
 highlight  default  link  TodoContext     Directory
-highlight  default  link  TodoProject     GitGutterChangeDefault
+"highlight  default  link  TodoProject     GitGutterChangeDefault
 
 " Std. scheme refs for above
 highlight  default  link  TodoInlineRefs1 MoreMsg
 highlight  default  link  TodoInlineRefs2 MoreMsg
 highlight  default  link  TodoCite        Type
 " would like a greenish but my Identifier is too bright
-highlight  default  link  TodoXRef        Comment
+highlight  default  link  TodoHRef        Comment
 " White underlined for issue-id
 highlight  default  link  TodoIssueID     CursorLine
 " Blue @contexts
