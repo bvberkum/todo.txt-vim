@@ -10,7 +10,7 @@ if exists("b:current_syntax")
 endif
 
 " Dim grey for entire close entry, or comment lines
-syntax  match  TodoDone               '^\s\+[xX]\s.\+$'
+syntax  match  TodoDone               '^[xX]\s.\+$'
 syntax  match  TodoComment            '^#\s.\+$'                       contains=TodoBUG,TodoFIXME,TodoTODO,TodoNOTE,TodoXXX
 
 " Dark purple for 'directives' (syntax extension, like c preproc directives)
@@ -48,8 +48,9 @@ syntax  match  TodoInlineRefs1    '\(^\|\s\)[A-Za-z_-]\+[\-\._]\?[0-9][0-9\-\.]*
 " using meta or uriref may be more suited.
 "syntax  match  TodoInlineRefs2    '\(^\|\s\)[A-Za-z0-9_-]\+[\-\._][^\ ]\+\(\s\|$\|\W\)' contains=TodoInlineRefs2,TodoProject,TodoContext
 
-
 "syntax  match  TodoDate           '\(^\|\s\)\d\{2,4\}-\d\{2\}-\d\{2\}'       contained contains=NONE
+syntax  match  TodoStat           '^[0-9.+-]\+'                              contains=TodoStatNa,TodoIssueID
+syntax  match  TodoStatNa         '\(^\|\s\)-'                               contained
 syntax  match  TodoDate           '\(^\|\s\)\d\{2,4\}-\d\{2\}-\d\{2\}'       contains=TodoDate,TodoIssueID
 
 " Treat any header ending with a colon as the IssueId for the entry
@@ -90,6 +91,10 @@ syntax  match  TodoHoldTag        '\s*\[WAIT\]'
 " This mapping was made with colorscheme=Mustang and Tango or similary
 " toned down pallette and adapted to ANSI 16-colours scheme.
 
+" Pale or Bright yellow dates
+highlight  default  link  TodoDate        PreProc
+highlight  default  link  TodoStatNa      SpecialKey
+
 highlight  default  link  TodoHold        Comment
 highlight  default  link  TodoHoldTag     PreProc
 highlight  default  link  TodoDone        Comment
@@ -102,6 +107,8 @@ highlight  default  link  TodoNumeral     Type
 highlight  default  link  TodoPreProcDir  SignColumn
 highlight  default  link  TodoXRef        String
 " highlight  default  link  TodoXRef        GitGutter
+
+highlight  default  link  TodoStat        PreProc
 
 highlight  default  link  TodoQuote        Identifier
 highlight  default  link  TodoQuote2       Identifier
@@ -130,9 +137,6 @@ highlight  default  link  TodoXXX  Comment
 "   and now the rest G-R, S-Z
 highlight  default  link  TodoPriorityPit VertSplit
 highlight  default  link  TodoPriorityPermafrost VertSplit
-
-" Bright yellow dates
-highlight  default  link  TodoDate        PreProc
 
 " Grey ~user
 highlight  default  link  TodoUser        SpecialKey
