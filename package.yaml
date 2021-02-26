@@ -1,0 +1,8 @@
+- type: application/vnd.org.wtwta.project
+  main: todo.txt-vim
+  id: todo.txt-vim
+  description: Syntax and scripts for todo.txt in Vim
+  repositories:
+    origin: git@github.com:dotmpe/todo.txt-vim.git
+    gh: https://github.com/dotmpe/todo.txt-vim.git
+    up: https://github.com/freitass/todo.txt-vim.git
